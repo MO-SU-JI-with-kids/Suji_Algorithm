@@ -41,7 +41,7 @@ root/
 3. 코드 제출 (Push)
 문제를 다 풀었으면 아래 명령어로 서버에 올린다.
 
-    ``git add .`` 
+    ``git add '파일명'`` 
 
     ``git commit -m "weekN BJ_문제번호"``
 
