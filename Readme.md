@@ -19,9 +19,9 @@ root/
 ├── README.md
 └── [본인이름]/
     ├── week01/
-    │   └── BJ_1000.py
+    │   └── BJ_1000.java
     └── week02/
-        └── BJ_2000.py
+        └── BJ_2000.java
 
 ```
 
