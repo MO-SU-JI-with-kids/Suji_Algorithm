@@ -1,6 +1,5 @@
 //  배열 돌리기 1
 
-
 import java.util.*;
 import java.io.*;
 
