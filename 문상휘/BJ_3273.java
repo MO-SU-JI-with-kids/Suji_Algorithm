@@ -26,6 +26,7 @@ public class Main {
 
 		int s = 0;
 		int e = n - 1;
+		
 		int count = 0;
 
 		while (s < e) {
