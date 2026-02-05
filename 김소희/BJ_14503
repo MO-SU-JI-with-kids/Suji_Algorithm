@@ -1,0 +1,85 @@
+package algorithm;
+
+import java.util.*;
+import java.io.*;
+
+public class 로봇청소기_14503 {
+	
+	public static void main(String[] args) throws Exception {
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String[] input = br.readLine().split(" ");
+		int R = Integer.parseInt(input[0]);
+		int C = Integer.parseInt(input[1]);
+		
+		// 로봇 청소기 정보 입력
+		input = br.readLine().split(" ");
+		int start_r = Integer.parseInt(input[0]);
+		int start_c = Integer.parseInt(input[1]);
+		int d = Integer.parseInt(input[2]);
+		
+		
+		// 방 정보 입력
+		String[][] map = new String[R][C];
+		for (int r = 0; r < R; r++) {
+			input = br.readLine().split(" ");
+			map[r] = input;
+		}
+		
+		// 1: 벽, 0: 청소 안됨
+		// d가 0 북, 1 동, 2 남, 3 서
+		int[] dr = {-1, 0, 1, 0};
+		int[] dc = {0, 1, 0, -1};
+		
+		int count = 1;
+		int cr = start_r, cc = start_c;
+		while (true) {
+			
+			// 현재 칸이 아직 청소되지 않은 경우, 현재 칸을 청소한다.
+			map[cr][cc] = "-1";			
+			
+
+			// 현재 칸의 주변 4칸 중 청소되지 않은 빈 칸이 **있는** 경우,
+			// 반시계 방향으로 90도 회전한다.
+			// 바라보는 방향을 기준으로 앞쪽 칸이 청소되지 않은 빈 칸인 경우 한 칸 전진한다.
+			// 1번으로 돌아간다.
+			boolean canModeForward = false;
+			for (int i = 1; i <= 4; i++) {
+				
+				int dir = (d - i + 4) % 4; // 반시계 방향으로 90도 회전 후 앞 칸 확인
+				int nr = cr + dr[dir], nc = cc + dc[dir];
+				if (nr < 0 || nr >= R || nc < 0 || nc >= C) continue;
+				if (map[nr][nc].equals("1")) continue;
+					
+				if (map[nr][nc].equals("0")) {
+					cr = nr; cc = nc;
+					canModeForward = true;
+					d = dir;
+					count++;
+					break;
+				}							
+			}
+			
+			// 현재 칸의 주변 4칸 중 청소되지 않은 빈 칸이 **없는** 경우,
+			// 바라보는 방향을 유지한 채로 한 칸 후진할 수 있다면 한 칸 후진하고 1번으로 돌아간다.
+			// 바라보는 방향의 뒤쪽 칸이 벽이라 후진할 수 없다면 작동을 멈춘다.
+
+			if (!canModeForward) {
+				
+				int dir = (d + 2) % 4; // 후진 방향
+				int nr = cr + dr[dir], nc = cc + dc[dir];
+				if (nr < 0 || nr >= R || nc < 0 || nc >= C) continue;
+				
+				if (map[nr][nc].equals("1")) {
+					break;				
+				}
+				else {
+					cr = nr; cc = nc;
+				}				
+			}
+			
+		}
+		
+		System.out.println(count);
+	}
+}
