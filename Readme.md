@@ -34,21 +34,21 @@ root/
 1.  매주 시작 전 (최신 코드 가져오기)
     작업 전, 다른 팀원이 업데이트한 내용을 반드시 먼저 받아와야 충돌을 방지할 수 있다.
 
-        ``git pull origin main``
+        git pull origin main
 
 2.  문제 풀이
     본인 이름 폴더 안에 해당 주차 폴더를 생성하고 코드를 작성한다.
 
-        ```예: gildong/week01/BJ_1000.py```
+        예: gildong/week01/BJ_1000.py
 
 3.  코드 제출 (Push)
     문제를 다 풀었으면 아래 명령어로 서버에 올린다.
 
-        ``git add '파일명'``
+        git add '파일명'
 
-        ``git commit -m "weekN BJ_문제번호"``
+        git commit -m "weekN BJ_문제번호"
 
-        ``git push origin main``
+        git push origin main
 
 ⚠️ 주의: push 할 때 에러가 발생하면, 그 사이에 다른 팀원이 코드를 올린 것이다. 당황하지 말고 다시 `git pull origin main`을 실행한 뒤에 push 해라.
 
