@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*; // BufferedReader 사용을 위한 import
 
-// [모수지] week2 AI 로봇청소기 / 주석 삭제 안함
+// [모수지] week2 AI 로봇청소기 
 
 
 class Cleaner{
@@ -32,12 +32,10 @@ class Area{
 
 public class Main {
 	public static Scanner sc = new Scanner(System.in);
-    
 	
 	static int N, K, L;
 	static int[][] info, visited;
 	static Cleaner[] cleaner;
-	//static int[] dy = {-1,0,0,1}, dx = {0,-1,1,0};
 	static int[] dy = {0,1,0,-1}, dx = {1,0,-1,0};
 	static int[][] direction = {
 			{0,1,3}, // 오른쪽 바라보기
@@ -55,10 +53,7 @@ public class Main {
     	for(int i=0; i<N; i++) {
     		for(int j=0; j<N; j++) info[i][j] = sc.nextInt();
     	}
-    	
-    	// 디버깅 : info 확인
-    	//printI();
-    	
+
     	for(int i=0; i<K; i++) {
     		int y = sc.nextInt();
     		int x = sc.nextInt();
@@ -73,61 +68,30 @@ public class Main {
     // 테스트 시작
     public static void clean() {
     	visited = new int[N][N]; // 청소기의 위치 저장 배열
-    	
-    	// visited 배열 초기화 : 기존에 청소기 있는 곳은 -1로 표시
-    	
-    	
-    	
-    	
+
     	//1. 각각의 청소기 이동
-    	for(int i=0; i<K; i++) {
-    		cleaner_move(i); // i번째 청소기를 움직인다.
-    		
-    		// 디버깅
-    		//printV();
-    	}
-    	
-    	// 디버깅
-    	//printV(); // 청소기의 위치 확인
-    	
-    	
+    	for(int i=0; i<K; i++) cleaner_move(i); // i번째 청소기를 움직인다.
+
     	// 2. 청소하기
-    	for(int i=0; i<K; i++) {
-    		do_clean(i);
-    	}
-    	
-    	// 디버깅
-    	//printI();
-    	
+    	for(int i=0; i<K; i++) do_clean(i);    	
+
     	// 3. 먼지 축적
     	dustdust();
-    	
-    	// 디버깅 
-    	//printI();
-    	
-    	
+
     	// 4.먼지 확산 
     	diffuse();
-    	// 디버깅 
-    	//printI();
-    	
+
     	// 전체 먼지의 양 더하기 
     	System.out.println(cnt_total());
-    	
-    	
     }
     
     public static int cnt_total() {
     	
     	int ans = 0;
     	for(int i=0; i<N; i++) {
-    		for(int j=0; j<N; j++) {
-    			if(info[i][j] > 0) ans += info[i][j];
-    		}
+    		for(int j=0; j<N; j++) if(info[i][j] > 0) ans += info[i][j];
     	}
-    	
     	return ans;
-    	
     }
     
     
@@ -137,7 +101,6 @@ public class Main {
     	for(int i=0; i<N; i++) {
     		System.arraycopy(info[i],0, before[i], 0, N); // 배열 복사
     	}
-    	
     	
     	for(int i=0; i<N; i++) {
     		for(int j=0; j<N; j++) {
@@ -164,26 +127,12 @@ public class Main {
     public static void dustdust() {
     	for(int i=0; i<N; i++) {
     		for(int j=0; j<N; j++) {
-    			
     			// 먼지가 있는 곳이라면
-    			if(info[i][j]>0) {
-    				info[i][j] += 5; // 먼지량 5씩 증가시키기
-    			}
+    			if(info[i][j]>0) info[i][j] += 5; // 먼지량 5씩 증가시키기 			
     		}
     	}
     }
-    
-    
-    /*
-     * 
-     * 
-     * 3 1 1
-0 0 -1
-0 50 0
-0 0 0
-2 1
-     */
-    
+
     
     // 청소를 한다 = 먼지를 줄인다.
     public static void do_clean(int num) {
@@ -215,11 +164,7 @@ public class Main {
     	});
     	
     	// 확정된 방향 = 0번 원소 
-    	Area selected = area[0];
-    	
-    	// 디버깅
-    	//System.out.println(selected.d);
-    	
+    	Area selected = area[0];    	
     	
     	// 현재 위치의 먼지 양 먼저 줄이기
     	info[cur.y][cur.x] = Math.max(0,info[cur.y][cur.x]-20 );
@@ -229,15 +174,8 @@ public class Main {
 			if(ny < 0 || ny >= N || nx < 0 || nx>=N) continue; //  범위 벗어나는 경우 
 			if(info[ny][nx] == -1) continue;
 			info[ny][nx] = Math.max(0, info[ny][nx]-20);
-    	}
-    	
-    	// 디버깅 - 청소 완료 확인 
-    	//printI();
-    	
+    	}	
     }
-    
-    
-    
     
     // 청소기 이동시키기 
     // 먼지  있는 곳까지 이동 못할 수도 있음! 유의하자.
@@ -262,31 +200,19 @@ public class Main {
     	int y=cur.y, x=cur.x; // 끝까지 도착 못 했을 경우에 대한..
     	int minDist = Integer.MAX_VALUE;
     	while(!q.isEmpty()) {
-    		//if(done) break;
     		Position cur_pos = q.poll();
-    		//y = cur_pos.y; x = cur_pos.x;
-    		
-    		// 디버깅용
-    		//System.out.println(cur_pos.x + ","+cur_pos.y);
+
     		
     		if(cur_pos.t > minDist) break;
     		
     		// 먼지가 있으면서 아직 다른 청소기가 없는 경우
     		if(info[cur_pos.y][cur_pos.x] >0 && visited[cur_pos.y][cur_pos.x]==0) {
-    			//System.out.println("발견함");
-    			//visited[cur_pos.y][cur_pos.x] = 1; // 현재 위치에 청소기 방문
-    			//cur.y = cur_pos.y;
-    			//cur.x = cur_pos.x; // 청소기 위치 갱신하기
     			list.add(cur_pos);
-    			minDist = cur_pos.t;
-    			//cur_visited[cur_pos.y][cur_pos.x]=true;
-    					
+    			minDist = cur_pos.t;			
     			continue;
-    			//return;
     		}
     		
     		else {
-
         		for(int i=0; i<4; i++) {
         			int ny = cur_pos.y + dy[i];
         			int nx = cur_pos.x + dx[i];
@@ -294,25 +220,10 @@ public class Main {
         			if(ny < 0 || ny >= N || nx < 0 || nx>=N) continue; //  범위 벗어나는 경우 
         			if(visited[ny][nx] == 1) continue; // 이미 다른 청소기가 위치하고 있는 곳인 경우 종료
         			if(cur_visited[ny][nx] || info[ny][nx] == -1) continue; // 이미 방문 한 곳이라면 종료 + 장애물이라면 종료
-        			//if(info[ny][nx] > 0) {
-        				//visited[ny][nx] = 1;
-        				//System.out.println("발견함");
-        	    	
-        				//cur.y = ny;
-        				//cur.x = nx;
-        				//done = true;
-        				//list.add(new Position(ny,nx,cur_pos.t+1));
-        				//return;
-        			//}
-        			
         			q.add(new Position(ny, nx, cur_pos.t+1));
         			cur_visited[ny][nx] = true; // 방문 표시
         		}	
-    			
     		}
-    		
-    		
-    		
     	}	
     	
     	
@@ -341,25 +252,5 @@ public class Main {
         	visited[cur.y][cur.x] = 1;
     	}
 
-    }
-    
-    
-    public static void printV() {
-    	for(int i=0; i<N; i++) {
-    		for(int j=0; j<N; j++) {
-    			System.out.print(visited[i][j]+" ");
-    		}
-    		System.out.println();
-    	}System.out.println();
-    }
-    
-    public static void printI() {
-    	for(int i=0; i<N; i++) {
-    		for(int j=0; j<N; j++) {
-    			System.out.print(info[i][j]+" ");
-    		}
-    		System.out.println();
-    	}System.out.println();
-    }
-    
+    }  
 }
