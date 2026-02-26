@@ -1,6 +1,6 @@
 import java.io.*;
 import java.util.*;
-
+ 
 public class AI로봇청소기 {
 
     static int N, K, L;
