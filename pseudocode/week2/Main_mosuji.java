@@ -4,6 +4,7 @@ import java.io.*; // BufferedReader 사용을 위한 import
 // [모수지] week2 AI 로봇청소기 
 
 
+
 class Cleaner{
 	int y, x;
 	Cleaner(int y, int x){
