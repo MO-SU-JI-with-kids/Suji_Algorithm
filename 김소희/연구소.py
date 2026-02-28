@@ -2,7 +2,7 @@ from collections import deque
 
 N, M = map(int, input().split())
 Map2L = [list(map(int, input().split())) for _ in range(N)]
-
+ 
 empties = []
 virus = []
 
