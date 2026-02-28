@@ -1,5 +1,5 @@
 from collections import defaultdict
-
+ 
 N = int(input())
 result = 0
     
