@@ -22,7 +22,7 @@ public class Main {
             if (nr >= 0 && nr < N && nc >= 0 && nc < N) {
                 if (!visited[nr][nc] && map[nr][nc] == '1') {
                     dfs(nr, nc);
-                    count++; // 파이썬 코드와 동일한 위치
+                    count++;
                 }
             }
         }
