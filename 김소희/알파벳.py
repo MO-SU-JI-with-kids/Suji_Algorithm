@@ -12,7 +12,7 @@ visitedL[0][0] = True
 FirstNumI = ord(MapL[0][0]) - ord('A')
 Alpha[FirstNumI] = True
 
-MaxCount = 0
+MaxCount = 1
 def dfs(r, c, count):        
     global MaxCount
     for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
