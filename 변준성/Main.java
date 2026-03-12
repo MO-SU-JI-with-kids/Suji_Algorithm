@@ -1,140 +1,70 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
-class Main{
+class Main {
 	
-	static class edge {
-		StringBuilder s;
-		int x,y;
-		
-		public edge(StringBuilder s, int x, int y) {
-			this.s = s;
-			this.x = x;
-			this.y = y;
+	static int N, M;
+	static int[] elements, maxTree, minTree;
+	
+	static void init(int node, int start, int end) {
+		if(start == end) {
+			maxTree[node] = elements[start];
+			minTree[node] = elements[start];
+			return;
 		}
 		
-		
+		int mid = (start + end) / 2;
+		init(node*2, start, mid);
+		init(node*2+1, mid+1, end);
+		maxTree[node] = Math.max(maxTree[node*2], maxTree[node*2+1]);
+		minTree[node] = Math.min(minTree[node*2], minTree[node*2+1]);
 	}
 	
-	static class TrieNode {
-		TrieNode[] children = new TrieNode[26];
+	static int queryMax(int node, int start, int end, int left, int right) {
+		if(left > end || right < start) return 0;
 		
-		int isEnd;
+		if(left <= start && right >= end) return maxTree[node];
+		
+		int mid = (start + end) / 2;
+		return Math.max(queryMax(node*2, start, mid, left, right), queryMax(node*2+1, mid+1, end, left, right));
 	}
 	
-	static class Trie {
-		TrieNode root = new TrieNode();
+	static int queryMin(int node, int start, int end, int left, int right) {
+		if(left > end || right < start) return 1_000_000_001;
 		
-		public void insert(String w) {
-			TrieNode curr = root;
-			
-			for(char c : w.toCharArray()) {
-				int idx = c - 'A';
-				
-				if(curr.children[idx] == null) {
-					curr.children[idx] = new TrieNode();
-				}
-				
-				curr = curr.children[idx];
-			}
-			
-			curr.isEnd = 1;
-		}
+		if(left <= start && right >= end) return minTree[node];
 		
-		public int find(String w) {
-			TrieNode curr = root;
-			
-			for(char c : w.toCharArray()) {
-				int idx = c - 'A';
-				
-				if(curr.children[idx] == null) return -1;
-				
-				curr = curr.children[idx];
-			}
-			
-			return curr.isEnd;
-		}
-	}
-	
-	static Trie tr;
-	static final int N = 4;
-	static int[] point = {0,0,0,1,1,2,3,5,11};
-	static int[] dx = {1,-1,0,0,1,1,-1,-1};
-	static int[] dy = {0,0,1,-1,1,-1,1,-1};
-	static char[][] map;
-	static boolean[][] visited;
-	static StringBuilder sb;
-	static TreeSet<String> ans;
-	
-	static void dfs(int i, int j, String s) {
-		if(s.length() == 9) return; 
-		
-		for(int k=0;k<8;k++) {
-			int nx = i + dx[k];
-			int ny = j + dy[k];
-			
-			if(nx<0 || ny<0 || nx>=N || ny>=N || visited[nx][ny]) continue;
-			
-			int t = tr.find(s+map[nx][ny]);
-			if(t == -1) continue;
-			else {
-				if(t==1) {
-					ans.add(s+map[nx][ny]);
-				}
-				visited[nx][ny] = true;
-				dfs(nx, ny, s+map[nx][ny]);
-				visited[nx][ny] = false;
-			}
-		}
+		int mid = (start + end) / 2;
+		return Math.min(queryMin(node*2, start, mid, left, right), queryMin(node*2+1, mid+1, end, left, right));
 	}
 	
 	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		tr = new Trie();
-		sb = new StringBuilder();
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		int n = Integer.parseInt(br.readLine().trim());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 		
-		for(int i=0;i<n;i++) {
-			tr.insert(br.readLine().trim());
+		elements = new int[N];
+		maxTree = new int[N*4];
+		minTree = new int[N*4];
+		
+		for(int i=0;i<N;i++) {
+			elements[i] = Integer.parseInt(br.readLine());
 		}
 		
-		br.readLine();
-		int t = Integer.parseInt(br.readLine());
-		map = new char[N][N];
-		visited = new boolean[N][N];
-		ans = new TreeSet<>();
+		init(1, 0, N-1);
 		
-		for(int tc=0;tc<t;tc++) {
-			for(int i=0;i<N;i++) {
-				map[i] = br.readLine().trim().toCharArray();
-			}
-			ans.clear();
+		StringBuilder sb = new StringBuilder();
+		
+		for(int i=0;i<M;i++) {
+			st = new StringTokenizer(br.readLine());
+			int l = Integer.parseInt(st.nextToken())-1;
+			int r = Integer.parseInt(st.nextToken())-1;
 			
-			for(int i=0;i<N;i++) {
-				for(int j=0;j<N;j++) {
-					visited[i][j] = true;
-					dfs(i,j, ""+map[i][j]);
-					visited[i][j] = false;
-				}
-			}
-			
-			int sum = 0;
-			String l = "";
-			
-			for(String s : ans) {
-				sum += point[s.length()];
-				if(s.length() > l.length()) l = s;
-			}
-			
-			
-			sb.append(sum).append(" ").append(l).append(" ").append(ans.size()).append("\n");
-			
-			if(tc != t-1)br.readLine();
+			sb.append(queryMin(1,0,N-1,l,r)).append(" ").append(queryMax(1,0,N-1,l,r)).append("\n");
 		}
 		
 		System.out.println(sb);
 	}
 }
-
-
